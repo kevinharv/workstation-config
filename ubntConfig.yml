@@ -107,8 +107,7 @@
         state: latest
 
     - name: Install NVM
-      shell: >
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+      shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
       args:
         creates: "/root/.nvm/nvm.sh"
 
