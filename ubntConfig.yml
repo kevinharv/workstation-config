@@ -1,0 +1,113 @@
+---
+- name: Configure Ubuntu System for development (CLI ONLY)
+  hosts: localhost
+  become: true
+
+  vars_prompt:
+    - name: hostname
+      prompt: "Enter system hostname:"
+
+
+  tasks:
+    - name: Set System Hostname
+      hostname: 
+        name: {{ hostname }}
+    
+    # Install updates
+    - name: Update APT Repositories
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+        cache_valid_time: 3600
+
+    - name: Upgrade Packages
+      apt:
+        name: "*"
+        state: latest
+
+    # Install packages
+
+    - name: Install GCC
+      package:
+        name: "gcc"
+        state: latest
+
+    - name: Install G++
+      package:
+        name: "g++"
+        state: latest
+
+    - name: Install Java 17
+      package:
+        name: "openjdk-17-jre"
+        state: latest
+
+    - name: Install Make
+      package:
+        name: "make"
+        state: latest
+
+    - name: Install Nano
+      package:
+        name: "nano"
+        state: latest
+
+    - name: Install Vim
+      package:
+        name: "vim"
+        state: latest
+    
+    - name: Install Traceroute
+      package:
+        name: "traceroute"
+        state: latest
+
+    - name: Install Whois
+      package:
+        name: "whois"
+        state: latest
+
+    - name: Install Python 3
+      package:
+        name: "python3"
+        state: latest
+
+    - name: Install openssh-client
+      package:
+        name: "openssh-client"
+        state: latest
+
+    - name: Install Vagrant
+      package:
+        name: "vagrant"
+        state: latest
+
+    - name: Install wget
+      package:
+        name: "wget"
+        state: latest
+
+    - name: Install x11-apps
+      package:
+        name: "x11-apps"
+        state: latest
+
+    - name: Install Git
+      package:
+        name: "git"
+        state: latest
+
+    - name: Install Nmap
+      package:
+        name: "nmap"
+        state: latest
+
+    - name: Install SSH-Copy-ID
+      package:
+        name: "ssh-copy-id"
+        state: latest
+
+    - name: Install Ansible
+      package:
+        name: "ansible"
+        state: latest
