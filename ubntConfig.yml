@@ -3,18 +3,20 @@
   become: true
   hosts: localhost
 
+  vars_prompt:
+    - name: hostname
+      prompt: "Enter system hostname"
+    - name: nvm_user
+      prompt: "Enter UNIX username"
+
   vars:
-  - nvm_user: "vagrant"
+  - nvm_user: "{{ nvm_user }}"
   - nvm_home: "/home/{{ nvm_user }}"
-  - nvm_group: "vagrant"
+  - nvm_group: "{{ nvm_user }}"
   - nvm_install_path: "{{ nvm_home }}/.nvm"
   - nvm_node_version: "v18.12.0"
   - nvm_node_dir: "{{ nvm_install_path }}/versions/node/{{ nvm_node_version }}"
   - nvm_npm_path: "{{ nvm_node_dir }}/bin/npm"
-
-  vars_prompt:
-    - name: hostname
-      prompt: "Enter system hostname:"
 
   tasks:
     - name: Set System Hostname
