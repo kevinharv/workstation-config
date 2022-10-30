@@ -37,6 +37,8 @@ This project was inspired by Jeff Geerling (geerlingguy) and his Ansible configu
 - ssh-copy-id
 - ansible
 
+- node version manager
+
 
 # TODO
 - Look at options for managing Windows

@@ -1,17 +1,16 @@
 ---
 - name: Configure Ubuntu System for development (CLI ONLY)
-  hosts: localhost
   become: true
+  hosts: localhost
 
   vars_prompt:
     - name: hostname
       prompt: "Enter system hostname:"
 
-
   tasks:
     - name: Set System Hostname
       hostname: 
-        name: {{ hostname }}
+        name: "{{ hostname }}"
     
     # Install updates
     - name: Update APT Repositories
