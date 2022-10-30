@@ -3,6 +3,15 @@
   become: true
   hosts: localhost
 
+  vars:
+  - nvm_user: "vagrant"
+  - nvm_home: "/home/{{ nvm_user }}"
+  - nvm_group: "vagrant"
+  - nvm_install_path: "{{ nvm_home }}/.nvm"
+  - nvm_node_version: "v18.12.0"
+  - nvm_node_dir: "{{ nvm_install_path }}/versions/node/{{ nvm_node_version }}"
+  - nvm_npm_path: "{{ nvm_node_dir }}/bin/npm"
+
   vars_prompt:
     - name: hostname
       prompt: "Enter system hostname:"
@@ -106,14 +115,48 @@
         name: "ansible"
         state: latest
 
-    - name: Install NVM
-      shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-      args:
-        creates: "/root/.nvm/nvm.sh"
+- name: check nvm shell script
+  stat:
+    path: "{{ nvm_install_path }}/nvm.sh"
+  register: nvm_sh
 
-    - name: Install Node Versions
-      shell: ". /root/.bashrc && nvm install {{item}}"
-      with_items: 
-        - '--lts'
-        - 'node'
+- name: check npm version
+  stat:
+    path: "{{ nvm_npm_path }}"
+  register: npm_sh
+
+- block:
+  - file:
+      path: "{{ nvm_home }}/.bashrc"
+      state: touch
+      mode: 0644
+      owner: "{{ nvm_user }}"
+      group: "{{ nvm_group }}"
+
+  - name: download nvm
+    get_url:
+      url: https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh
+      dest: /tmp/install.sh
+      mode: 0777
+
+  - name: change owner of nvm install file
+    file:
+      path: /tmp/install.sh
+      owner: "{{ nvm_user }}"
+      group: "{{ nvm_group }}"
+
+  - name: install nvm
+    shell: /tmp/install.sh
+    args:
       executable: /bin/bash
+    environment:
+      HOME: "{{ nvm_home }}"
+
+  - name: install node version and set it as default
+    shell: ". {{ nvm_home }}/.nvm/nvm.sh && nvm install {{ nvm_node_version }} && nvm use {{ nvm_node_version }}"
+    args:
+      executable: /bin/bash
+    environment:
+      HOME: "{{ nvm_home }}"
+
+  when: nvm_sh.stat.exists == False or npm_sh.stat.exists == False
