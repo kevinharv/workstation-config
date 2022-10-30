@@ -4,9 +4,10 @@ This project was inspired by Jeff Geerling (geerlingguy) and his Ansible configu
 ## Steps to Use
 1. Install OS
 2. Configure user, import dotfiles
-3. Ensure Python 3 is installed
+3. Ensure Python 3 and pip are installed
 4. ```pip3 install ansible```
-5. Run playbook for relevant distro
+5. Restart shell (load ansible commands)
+6. Run playbook for relevant distro
 
 ## Platforms
 - Ubuntu (Debian)
