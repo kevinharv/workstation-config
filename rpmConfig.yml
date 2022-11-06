@@ -1,0 +1,163 @@
+---
+- name: Configure RPM System for development
+  become: true
+  hosts: localhost
+
+  vars_prompt:
+    - name: hostname
+      prompt: "Enter system hostname"
+    - name: nvm_user
+      prompt: "Enter UNIX username"
+
+  vars:
+  - nvm_user: "{{ nvm_user }}"
+  - nvm_home: "/home/{{ nvm_user }}"
+  - nvm_group: "{{ nvm_user }}"
+  - nvm_install_path: "{{ nvm_home }}/.nvm"
+  - nvm_node_version: "v18.12.0"
+  - nvm_node_dir: "{{ nvm_install_path }}/versions/node/{{ nvm_node_version }}"
+  - nvm_npm_path: "{{ nvm_node_dir }}/bin/npm"
+
+  tasks:
+    - name: Set System Hostname
+      hostname: 
+        name: "{{ hostname }}"
+    
+    # Install updates
+    - name: Upgrade RHEL/CentOS Distribution
+      dnf:
+        name: "kernel"
+        state: latest
+
+    - name: Upgrade Packages
+      apt:
+        name: "*"
+        state: latest
+
+    # Install packages
+
+    - name: Install GCC
+      package:
+        name: "gcc"
+        state: latest
+
+    - name: Install G++
+      package:
+        name: "g++"
+        state: latest
+
+    - name: Install Java 17
+      package:
+        name: "openjdk-17-jre"
+        state: latest
+
+    - name: Install Make
+      package:
+        name: "make"
+        state: latest
+
+    - name: Install Nano
+      package:
+        name: "nano"
+        state: latest
+
+    - name: Install Vim
+      package:
+        name: "vim"
+        state: latest
+    
+    - name: Install Traceroute
+      package:
+        name: "traceroute"
+        state: latest
+
+    - name: Install Whois
+      package:
+        name: "whois"
+        state: latest
+
+    - name: Install Python 3
+      package:
+        name: "python3"
+        state: latest
+
+    - name: Install openssh-client
+      package:
+        name: "openssh-client"
+        state: latest
+
+    - name: Install Vagrant
+      package:
+        name: "vagrant"
+        state: latest
+
+    - name: Install wget
+      package:
+        name: "wget"
+        state: latest
+
+    - name: Install x11-apps
+      package:
+        name: "x11-apps"
+        state: latest
+
+    - name: Install Git
+      package:
+        name: "git"
+        state: latest
+
+    - name: Install Nmap
+      package:
+        name: "nmap"
+        state: latest
+
+    - name: Install Ansible
+      package:
+        name: "ansible"
+        state: latest
+
+    - name: Check for NVM Install Script
+      stat:
+        path: "{{ nvm_install_path }}/nvm.sh"
+      register: nvm_sh
+
+    - name: Check for NPM
+      stat:
+        path: "{{ nvm_npm_path }}"
+      register: npm_sh
+
+    - block:
+      - file:
+          path: "{{ nvm_home }}/.bashrc"
+          state: touch
+          mode: 0644
+          owner: "{{ nvm_user }}"
+          group: "{{ nvm_group }}"
+
+      - name: Download NVM
+        get_url:
+          url: https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh
+          dest: /tmp/install.sh
+          mode: 0777
+
+      - name: Set Owner of NVM Install Script
+        file:
+          path: /tmp/install.sh
+          owner: "{{ nvm_user }}"
+          group: "{{ nvm_group }}"
+
+      - name: Install NVM
+        shell: /tmp/install.sh
+        args:
+          executable: /bin/bash
+        environment:
+          HOME: "{{ nvm_home }}"
+
+      - name: Install Node.js and Set Defaults
+        shell: ". {{ nvm_home }}/.nvm/nvm.sh && nvm install {{ nvm_node_version }} && nvm use {{ nvm_node_version }}"
+        args:
+          executable: /bin/bash
+        environment:
+          HOME: "{{ nvm_home }}"
+
+      when: nvm_sh.stat.exists == False or npm_sh.stat.exists == False
