@@ -48,7 +48,7 @@
 
     - name: Install Java 17
       package:
-        name: "openjdk-17-jre"
+        name: "java-17-openjdk"
         state: latest
 
     - name: Install Make
@@ -81,11 +81,6 @@
         name: "python3"
         state: latest
 
-    - name: Install openssh-client
-      package:
-        name: "openssh-client"
-        state: latest
-
     - name: Install Vagrant
       package:
         name: "vagrant"
@@ -96,11 +91,6 @@
         name: "wget"
         state: latest
 
-    - name: Install x11-apps
-      package:
-        name: "x11-apps"
-        state: latest
-
     - name: Install Git
       package:
         name: "git"
@@ -109,11 +99,6 @@
     - name: Install Nmap
       package:
         name: "nmap"
-        state: latest
-
-    - name: Install Ansible
-      package:
-        name: "ansible"
         state: latest
 
     - name: Check for NVM Install Script
