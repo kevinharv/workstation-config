@@ -51,6 +51,11 @@
         name: "java-17-openjdk"
         state: latest
 
+    - name: Install Java 17 JDK
+      package:
+        name: "java-17-openjdk-devel"
+        state: latest
+
     - name: Install Make
       package:
         name: "make"
@@ -79,6 +84,11 @@
     - name: Install Python 3
       package:
         name: "python3"
+        state: latest
+
+    - name: Install Rust
+      package:
+        name: "rust"
         state: latest
 
     - name: Install Vagrant
