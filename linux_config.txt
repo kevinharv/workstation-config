@@ -1,0 +1,18 @@
+Gnome extension:
+	- gnome-extensions-app
+	- gnome-tweaks
+	- Enable user shell at website
+	- Enable dash to panel at website
+
+Gnome looks:
+	- Download zip theme from gnome looks
+		- Move into ~/.themes and enable via tweks
+	- Download icons and move into ~/.icons
+
+Fonts
+	- Move fonts into ~/.fonts
+
+Zsh:
+	- Insatll zsh
+	- Install powerlevel10k
+Neofetch
