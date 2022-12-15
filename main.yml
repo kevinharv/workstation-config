@@ -1,0 +1,30 @@
+---
+- name: Configure RPM System for development
+  become: true
+  hosts: rhel
+  vars_prompt:
+        - name: hostname
+          prompt: "Enter system hostname"
+        - name: nvm_user
+          prompt: "Enter UNIX username"
+
+
+  tasks:
+    - name: Set System Hostname
+      hostname: 
+        name: "{{ hostname }}"
+
+    # Install updates
+    - name: Upgrade RHEL/CentOS Distribution
+      dnf:
+        name: "kernel"
+        state: latest
+
+    - name: Upgrade Packages
+      apt:
+        name: "*"
+        state: latest
+
+  roles:
+    - gui
+    - packages

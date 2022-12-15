@@ -16,10 +16,10 @@ Vagrant.configure("2") do |config|
       ubuntu.vm.network :private_network, ip: "192.168.56.5"
     end
   
-    # # Define RHEL (CentOS) configuration
-    # config.vm.define "rhel" do |rhel|
-    #   rhel.vm.box = "generic/rocky8"
-    #   rhel.vm.hostname = "rocky8.test"
-    #   rhel.vm.network :private_network, ip: "192.168.56.6"
-    # end
+    # Define RHEL (CentOS) configuration
+    config.vm.define "rhel" do |rhel|
+      rhel.vm.box = "generic/rocky9"
+      rhel.vm.hostname = "rocky9.test"
+      rhel.vm.network :private_network, ip: "192.168.56.6"
+    end
   end
