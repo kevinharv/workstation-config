@@ -1,5 +1,4 @@
 ---
-# ADD COPY DOTFILES
 - name: Add Visual Studio Code repository
   yum_repository:
     name: vscode
@@ -13,6 +12,12 @@
   dnf:
     name: code
     state: present
+
+- name: Install LibreOffice
+  dnf:
+    name: libreoffice
+    state: present
+  when: ansible_distribution != "Rocky"
 
 - name: Install Gnome Tweaks
   dnf:
@@ -29,7 +34,34 @@
     name: zsh
     state: present
 
+- name: Install zsh-autosuggestions
+  dnf:
+    name: zsh-autosuggestions
+    state: present
+  when: ansible_distribution != "Rocky"
+
 - name: Install Neofetch
   dnf:
     name: neofetch
+    state: present
+
+- name: Set ZSH as Shell
+  user:
+    name: "{{ primary_user }}"
+    shell: /bin/zsh
+
+- name: Install Snap
+  dnf:
+    name: snapd
+    state: present
+
+- name: Enable snapd
+  ansible.builtin.systemd:
+    name: snapd
+    state: started
+    enabled: yes
+
+- name: Install Spotify via Snap
+  snap:
+    name: spotify
     state: present

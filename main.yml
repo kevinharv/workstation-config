@@ -1,30 +1,25 @@
 ---
 - name: Configure RPM System for development
   become: true
-  hosts: rhel
+  hosts: rhel   # Development
+  # hosts: localhost  # Production
   vars_prompt:
-        - name: hostname
-          prompt: "Enter system hostname"
-        - name: nvm_user
-          prompt: "Enter UNIX username"
+    - name: hostname
+      prompt: "Enter system hostname"
+    - name: primary_user
+      prompt: "Enter UNIX username"
 
 
-  tasks:
+  pre_tasks:
     - name: Set System Hostname
       hostname: 
         name: "{{ hostname }}"
+      when: ansible_distribution != "Rocky"
 
-    # Install updates
-    - name: Upgrade RHEL/CentOS Distribution
-      dnf:
-        name: "kernel"
-        state: latest
-
-    - name: Upgrade Packages
-      apt:
-        name: "*"
-        state: latest
+    - name: Update Systems
+      include_tasks: ./tasks/update.yml
 
   roles:
-    - gui
     - packages
+    - config
+    - gui

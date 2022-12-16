@@ -1,5 +1,6 @@
 ---
 # Install packages
+# ADD pip3, pip3 ansible
 
 - name: Install GCC
   package:
@@ -60,6 +61,7 @@
   package:
     name: "vagrant"
     state: latest
+  when: ansible_distribution != "Rocky"
 
 - name: Install wget
   package:
@@ -76,6 +78,10 @@
     name: "nmap"
     state: latest
 
+- name: DEBUGGING
+  debug:
+    msg: "User: {{ primary_user }} Group: {{ nvm_group }}"
+
 - name: Check for NVM Install Script
   stat:
     path: "{{ nvm_install_path }}/nvm.sh"
@@ -91,7 +97,7 @@
       path: "{{ nvm_home }}/.bashrc"
       state: touch
       mode: 0644
-      owner: "{{ nvm_user }}"
+      owner: "{{ primary_user }}"
       group: "{{ nvm_group }}"
 
   - name: Download NVM
@@ -103,7 +109,7 @@
   - name: Set Owner of NVM Install Script
     file:
       path: /tmp/install.sh
-      owner: "{{ nvm_user }}"
+      owner: "{{ primary_user }}"
       group: "{{ nvm_group }}"
 
   - name: Install NVM
@@ -113,6 +119,8 @@
     environment:
       HOME: "{{ nvm_home }}"
 
+  # Change .nvm dir to owned by primary_user
+
   - name: Install Node.js and Set Defaults
     shell: ". {{ nvm_home }}/.nvm/nvm.sh && nvm install {{ nvm_node_version }} && nvm use {{ nvm_node_version }}"
     args:
@@ -121,3 +129,12 @@
       HOME: "{{ nvm_home }}"
 
   when: nvm_sh.stat.exists == False or npm_sh.stat.exists == False
+
+  
+- name: Change .nvm owner
+  ansible.builtin.file:
+    path: /home/ {{ primary_user }}/.nvm
+    state: directory
+    recurse: yes
+    owner: "{{ primary_user }}"
+    group: "{{ primary_user }}"
