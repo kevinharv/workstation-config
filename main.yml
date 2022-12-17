@@ -11,16 +11,17 @@
 
 
   pre_tasks:
-    # - name: Set System Hostname
-    #   hostname: 
-    #     name: "{{ hostname }}"
-    #   when: ansible_distribution != "Rocky"
+    - name: Set System Hostname
+      hostname: 
+        name: "{{ hostname }}"
+      when: ansible_distribution != "Rocky"
 
     - name: Update Systems
       include_tasks: ./tasks/update.yml
 
   roles:
-    # - packages
+    - packages
     - config
-    - wsl
-    # - gui
+    # - wsl
+    - gui
+    - docker
