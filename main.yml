@@ -1,8 +1,8 @@
 ---
 - name: Configure RPM System for development
   become: true
-  hosts: rhel   # Development
-  # hosts: localhost  # Production
+  # hosts: rhel   # Development
+  hosts: localhost  # Production
   vars_prompt:
     - name: hostname
       prompt: "Enter system hostname"
@@ -11,15 +11,16 @@
 
 
   pre_tasks:
-    - name: Set System Hostname
-      hostname: 
-        name: "{{ hostname }}"
-      when: ansible_distribution != "Rocky"
+    # - name: Set System Hostname
+    #   hostname: 
+    #     name: "{{ hostname }}"
+    #   when: ansible_distribution != "Rocky"
 
     - name: Update Systems
       include_tasks: ./tasks/update.yml
 
   roles:
-    - packages
+    # - packages
     - config
-    - gui
+    - wsl
+    # - gui
