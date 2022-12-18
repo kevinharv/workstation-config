@@ -20,8 +20,8 @@
       include_tasks: ./tasks/update.yml
 
   roles:
+    # - wsl
     - packages
     - config
-    # - wsl
     - gui
     - docker

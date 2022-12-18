@@ -1,7 +1,7 @@
 ---
 - name: Copy dotfiles
   ansible.builtin.copy:
-    src: ../files/test.tar
+    src: ../files/dotfiles.tar
     dest: /home/{{ primary_user }}/
     owner: "{{ primary_user }}"
     group: "{{ primary_user }}"
@@ -10,11 +10,11 @@
 
 - name: Extract dotfiles
   ansible.builtin.unarchive:
-    src: ../files/test.tar
+    src: ../files/dotfiles.tar
     dest: /home/{{ primary_user }}/
     remote_src: no
 
 - name: Remove tarball
   ansible.builtin.file:
-    path: /home/{{ primary_user }}/test.tar
+    path: /home/{{ primary_user }}/dotfiles.tar
     state: absent
