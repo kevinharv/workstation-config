@@ -1,26 +1,36 @@
 ---
 - name: Configure RPM System for development
   become: true
-  # hosts: rhel   # Development
-  hosts: localhost  # Production
-  vars_prompt:
-    - name: hostname
-      prompt: "Enter system hostname"
-    - name: primary_user
-      prompt: "Enter UNIX username"
+  hosts: localhost
 
+  vars_prompt: 
+    - name: primary_user
+      prompt: "Enter username to create"
 
   pre_tasks:
-    - name: Set System Hostname
-      hostname: 
-        name: "{{ hostname }}"
-      when: ansible_distribution != "Rocky"
+    # - name: Set hostname
+    #   ansible.builtin.hostname:
+    #     name: "rockdock1"
 
-    - name: Update Systems
-      include_tasks: ./tasks/update.yml
+    - name: Upgrade RHEL/CentOS Distribution
+      dnf:
+        name: "kernel"
+        state: latest
+
+    - name: Upgrade All Packages
+      package:
+        name: "*"
+        state: latest
+    
+    - name: Create administrator user
+      ansible.builtin.user:
+        name: "{{ primary_user }}"
+        shell: "{{ user_shell }}"
+        groups: wheel
+        append: yes
+        state: present
 
   roles:
-    # - wsl
     - packages
     - config
     - gui

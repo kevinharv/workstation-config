@@ -12,7 +12,5 @@ Gnome looks:
 Fonts
 	- Move fonts into ~/.fonts
 
-Zsh:
-	- Insatll zsh
+Bash:
 	- Install powerlevel10k
-Neofetch

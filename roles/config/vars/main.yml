@@ -1,2 +1,3 @@
 ---
-# owning_user: "kevin"
+dotfiles_repo: "https://github.com/kevinharv/dotfiles.git"
+user_shell: "/bin/bash"

@@ -1,0 +1,5 @@
+---
+packages:
+  - code
+  - gnome-tweaks
+  - gnome-extensions-app

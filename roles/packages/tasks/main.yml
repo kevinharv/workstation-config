@@ -1,86 +1,12 @@
 ---
-# Install packages
-# ADD pip3, pip3 ansible
-
-- name: Install GCC
-  package:
-    name: "gcc"
+- name: Install Packages
+  ansible.builtin.package:
+    name: "{{ item }}"
     state: latest
+  loop: "{{ packages }}"
 
-- name: Install G++
-  package:
-    name: "g++"
-    state: latest
 
-- name: Install Java 17
-  package:
-    name: "java-17-openjdk"
-    state: latest
-
-- name: Install Java 17 JDK
-  package:
-    name: "java-17-openjdk-devel"
-    state: latest
-
-- name: Install Make
-  package:
-    name: "make"
-    state: latest
-
-- name: Install Nano
-  package:
-    name: "nano"
-    state: latest
-
-- name: Install Vim
-  package:
-    name: "vim"
-    state: latest
-
-- name: Install Traceroute
-  package:
-    name: "traceroute"
-    state: latest
-
-- name: Install Whois
-  package:
-    name: "whois"
-    state: latest
-
-- name: Install Python 3
-  package:
-    name: "python3"
-    state: latest
-
-- name: Install Rust
-  package:
-    name: "rust"
-    state: latest
-
-- name: Install Vagrant
-  package:
-    name: "vagrant"
-    state: latest
-  when: ansible_distribution != "Rocky"
-
-- name: Install wget
-  package:
-    name: "wget"
-    state: latest
-
-- name: Install Git
-  package:
-    name: "git"
-    state: latest
-
-- name: Install Nmap
-  package:
-    name: "nmap"
-    state: latest
-
-- name: DEBUGGING
-  debug:
-    msg: "User: {{ primary_user }} Group: {{ nvm_group }}"
+# ----------------- Install NodeJS -----------------------
 
 - name: Check for NVM Install Script
   stat:
@@ -88,12 +14,12 @@
   register: nvm_sh
 
 - name: Check for NPM
-  stat:
+  ansible.builtin.stat:
     path: "{{ nvm_npm_path }}"
   register: npm_sh
 
 - block:
-  - file:
+  - ansible.builtin.file:
       path: "{{ nvm_home }}/.bashrc"
       state: touch
       mode: 0644
@@ -101,40 +27,60 @@
       group: "{{ nvm_group }}"
 
   - name: Download NVM
-    get_url:
+    ansible.builtin.get_url:
       url: https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh
       dest: /tmp/install.sh
       mode: 0777
 
   - name: Set Owner of NVM Install Script
-    file:
+    ansible.builtin.file:
       path: /tmp/install.sh
       owner: "{{ primary_user }}"
       group: "{{ nvm_group }}"
 
   - name: Install NVM
-    shell: /tmp/install.sh
+    ansible.builtin.shell: /tmp/install.sh
     args:
       executable: /bin/bash
     environment:
       HOME: "{{ nvm_home }}"
-
-  # Change .nvm dir to owned by primary_user
 
   - name: Install Node.js and Set Defaults
-    shell: ". {{ nvm_home }}/.nvm/nvm.sh && nvm install {{ nvm_node_version }} && nvm use {{ nvm_node_version }}"
+    ansible.builtin.shell: ". {{ nvm_home }}/.nvm/nvm.sh && nvm install {{ nvm_node_version }} && nvm use {{ nvm_node_version }}"
     args:
       executable: /bin/bash
     environment:
       HOME: "{{ nvm_home }}"
 
+  - name: Change .nvm owner
+    ansible.builtin.file:
+      path: /home/{{ primary_user }}/.nvm
+      state: directory
+      recurse: yes
+      owner: "{{ primary_user }}"
+      group: "{{ primary_user }}"
   when: nvm_sh.stat.exists == False or npm_sh.stat.exists == False
 
-  
-- name: Change .nvm owner
-  ansible.builtin.file:
-    path: /home/ {{ primary_user }}/.nvm
-    state: directory
-    recurse: yes
-    owner: "{{ primary_user }}"
-    group: "{{ primary_user }}"
+#  --------------- Install Rust --------------------
+
+- name: Check if Cargo is installed
+  ansible.builtin.shell: command -v cargo
+  register: cargo_exists
+  ignore_errors: true
+
+- block:
+  - name: Download Rust Installer
+    ansible.builtin.get_url:
+      url: https://sh.rustup.rs
+      dest: /tmp/sh.rustup.rs
+      mode: '0755'
+      force: 'yes'
+    tags:
+      - rust
+
+  - name: Install Rust/Cargo
+    ansible.builtin.shell: /tmp/sh.rustup.rs -y
+    tags:
+      - rust
+
+  when: cargo_exists is failed
