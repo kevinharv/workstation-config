@@ -19,7 +19,8 @@
   register: npm_sh
 
 - block:
-  - ansible.builtin.file:
+  - name: Create .bashrc If Missing
+    ansible.builtin.file:
       path: "{{ nvm_home }}/.bashrc"
       state: touch
       mode: 0644
@@ -52,7 +53,7 @@
     environment:
       HOME: "{{ nvm_home }}"
 
-  - name: Change .nvm owner
+  - name: Change .nvm Owner
     ansible.builtin.file:
       path: /home/{{ primary_user }}/.nvm
       state: directory
