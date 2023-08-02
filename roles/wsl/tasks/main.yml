@@ -1,149 +1,32 @@
 ---
-- name: Install ZSH
-  package:
-    name: zsh
+- name: Install Packages
+  ansible.builtin.package:
+    name: "{{ item }}"
     state: present
-
-- name: Install zsh-autosuggestions
-  package:
-    name: zsh-autosuggestions
-    state: present
-  when: ansible_distribution != "Rocky"
-
-- name: Install Neofetch
-  package:
-    name: neofetch
-    state: present
-
-- name: Set ZSH as Shell
-  user:
-    name: "{{ primary_user }}"
-    shell: /bin/zsh
-
-- name: Install GCC
-  package:
-    name: "gcc"
-    state: latest
-
-- name: Install G++
-  package:
-    name: "g++"
-    state: latest
-
-- name: Install Java 17
-  package:
-    name: "openjdk-18-jdk"
-    state: latest
-
-- name: Install Make
-  package:
-    name: "make"
-    state: latest
-
-- name: Install Nano
-  package:
-    name: "nano"
-    state: latest
-
-- name: Install Vim
-  package:
-    name: "vim"
-    state: latest
-
-- name: Install Traceroute
-  package:
-    name: "traceroute"
-    state: latest
-
-- name: Install Whois
-  package:
-    name: "whois"
-    state: latest
-
-- name: Install Python 3
-  package:
-    name: "python3"
-    state: latest
-
-- name: Install Rust
-  package:
-    name: "rust-all"
-    state: latest
-
-- name: Install Vagrant
-  package:
-    name: "vagrant"
-    state: latest
-  when: ansible_distribution != "Rocky"
-
-- name: Install wget
-  package:
-    name: "wget"
-    state: latest
-
-- name: Install Git
-  package:
-    name: "git"
-    state: latest
-
-- name: Install Nmap
-  package:
-    name: "nmap"
-    state: latest
-
-- name: Check for NVM Install Script
-  stat:
-    path: "{{ nvm_install_path }}/nvm.sh"
-  register: nvm_sh
-
-- name: Check for NPM
-  stat:
-    path: "{{ nvm_npm_path }}"
-  register: npm_sh
-
-- block:
-  - file:
-      path: "{{ nvm_home }}/.bashrc"
-      state: touch
-      mode: 0644
-      owner: "{{ primary_user }}"
-      group: "{{ nvm_group }}"
-
-  - name: Download NVM
-    get_url:
-      url: https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh
-      dest: /tmp/install.sh
-      mode: 0777
-
-  - name: Set Owner of NVM Install Script
-    file:
-      path: /tmp/install.sh
-      owner: "{{ primary_user }}"
-      group: "{{ nvm_group }}"
-
-  - name: Install NVM
-    shell: /tmp/install.sh
-    args:
-      executable: /bin/bash
-    environment:
-      HOME: "{{ nvm_home }}"
-
-  # Change .nvm dir to owned by primary_user
-
-  - name: Install Node.js and Set Defaults
-    shell: ". {{ nvm_home }}/.nvm/nvm.sh && nvm install {{ nvm_node_version }} && nvm use {{ nvm_node_version }}"
-    args:
-      executable: /bin/bash
-    environment:
-      HOME: "{{ nvm_home }}"
-
-  when: nvm_sh.stat.exists == False or npm_sh.stat.exists == False
-
+  loop:
+    - gcc
+    - g++
+    - openjdk-18-jdk
+    - vim
+    - traceroute
+    - whois
+    - python3.11
+    - rust-all
+    - wget
+    - git
+    - nmap
   
-- name: Change .nvm owner
-  ansible.builtin.file:
-    path: /home/ {{ primary_user }}/.nvm
-    state: directory
-    recurse: yes
-    owner: "{{ primary_user }}"
-    group: "{{ primary_user }}"
+- name: Install Tauri Dev Dependencies
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - libwebkit2gtk-4.0-dev
+    - build-essential
+    - curl
+    - wget
+    - file
+    - libssl-dev
+    - libgtk3-dev
+    - libayatana-appindicator3-dev
+    - librsvg2-dev

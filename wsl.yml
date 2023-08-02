@@ -1,0 +1,18 @@
+---
+- name: Configure WSL System for development
+  become: true
+  hosts: localhost
+
+  pre_tasks:
+  - name: Upgrade RHEL/CentOS Distribution
+    ansible.builtin.apt:
+      name: "kernel"
+      state: latest
+
+  - name: Upgrade All Packages
+    ansible.builtin.package:
+      name: "*"
+      state: latest
+
+  roles:
+  - wsl

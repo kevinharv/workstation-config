@@ -13,28 +13,28 @@
 #     owner: "{{ primary_user }}"
 #     group: "{{ primary_user }}"
 
-- name: Install TLP Power Management
-  ansible.builtin.package:
-    name: "{{ item }}"
-    state: present
-  loop:
-    - tlp
-    - tlp-rdw
+# - name: Install TLP Power Management
+#   ansible.builtin.package:
+#     name: "{{ item }}"
+#     state: present
+#   loop:
+#     - tlp
+#     - tlp-rdw
 
-- name: Remove Default Power Management
-  ansible.builtin.package:
-    name: "power-profiles-daemon"
-    state: absent
+# - name: Remove Default Power Management
+#   ansible.builtin.package:
+#     name: "power-profiles-daemon"
+#     state: absent
 
-- name: Enable TLP Service
-  ansible.builtin.systemd:
-    state: started
-    name: tlp.service
+# - name: Enable TLP Service
+#   ansible.builtin.systemd:
+#     state: started
+#     name: tlp.service
 
-- name: Mask RF Services
-  ansible.builtin.systemd:
-    name: "{{ item }}"
-    masked: true
-  loop:
-    - systemd-rfkill.service
-    - systemd-rfkill.socket
+# - name: Mask RF Services
+#   ansible.builtin.systemd:
+#     name: "{{ item }}"
+#     masked: true
+#   loop:
+#     - systemd-rfkill.service
+#     - systemd-rfkill.socket
