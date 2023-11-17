@@ -3,32 +3,19 @@
   become: true
   hosts: localhost
 
-  vars_prompt: 
-    - name: primary_user
-      prompt: "Enter username to create"
-
   pre_tasks:
-    # - name: Set hostname
-    #   ansible.builtin.hostname:
-    #     name: "rockdock1"
-
+    - name: Include Variables
+      ansible.builtin.include_vars: vars/main.yml
+      
     - name: Upgrade RHEL/CentOS Distribution
-      dnf:
+      ansible.builtin.dnf:
         name: "kernel"
         state: latest
 
     - name: Upgrade All Packages
-      package:
+      ansible.builtin.package:
         name: "*"
         state: latest
-    
-    - name: Create administrator user
-      ansible.builtin.user:
-        name: "{{ primary_user }}"
-        shell: "{{ user_shell }}"
-        groups: wheel
-        append: yes
-        state: present
 
   roles:
     - packages

@@ -5,11 +5,19 @@
     state: latest
   loop: "{{ packages }}"
 
+- name: Install the "C Development Tools and Libraries" Package Group
+  ansible.builtin.dnf:
+    name: '@C Development Tools and Libraries'
+    state: present
+
+- name: Install Ansible
+  ansible.builtin.pip:
+    name: ansible
 
 # ----------------- Install NodeJS -----------------------
 
 - name: Check for NVM Install Script
-  stat:
+  ansible.builtin.stat:
     path: "{{ nvm_install_path }}/nvm.sh"
   register: nvm_sh
 

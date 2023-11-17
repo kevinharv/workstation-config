@@ -39,8 +39,3 @@ This project was inspired by Jeff Geerling (geerlingguy) and his Ansible configu
 - ansible
 
 - node version manager - lts
-
-
-# TODO
-- Look at options for managing Windows
-- Add Docker Desktop for RPM

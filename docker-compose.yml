@@ -2,10 +2,8 @@
 version: v3
 name: "workstation_config"
 services:
-  rocky:
+  fedora:
     build: .
-    # command: ["/bin/bash"]
-    # init: true
     tty: true
     privileged: true
     cgroup: host

@@ -1,6 +1,6 @@
 ---
 - name: Add Visual Studio Code repository
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: vscode
     description: Visual Studio Code repository
     baseurl: https://packages.microsoft.com/yumrepos/vscode
@@ -9,15 +9,12 @@
     state: present
 
 - name: Install Packages
-  package:
+  ansible.builtin.package:
     name: "{{ item }}"
     state: latest
   loop: "{{ packages }}"
 
-- name: Install Snap
-  dnf:
-    name: snapd
-    state: present
+
 
 - name: Enable snapd
   ansible.builtin.systemd:
@@ -26,6 +23,6 @@
     enabled: yes
 
 - name: Install Spotify via Snap
-  snap:
+  community.general.snap:
     name: spotify
     state: present

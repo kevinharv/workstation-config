@@ -1,17 +1,10 @@
 ---
-- name: Clone dotfiles repo
+- name: Clone Dotfile Repository
   ansible.builtin.git:
     repo: "{{ dotfiles_repo }}"
     dest: "/home/{{ primary_user }}/dotfiles"
     owner: "{{ primary_user }}"
     group: "{{ primary_user }}"
-
-# - name: Move dotfiles into root of home directory
-#   ansible.builtin.copy:
-#     src: "/home/{{ primary_user }}/dotfiles/"
-#     dest: "/home/{{ primary_user }}/"
-#     owner: "{{ primary_user }}"
-#     group: "{{ primary_user }}"
 
 # - name: Install TLP Power Management
 #   ansible.builtin.package:

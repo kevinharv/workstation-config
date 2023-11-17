@@ -3,7 +3,7 @@ nvm_user: "{{ primary_user }}"
 nvm_home: "/home/{{ primary_user }}"
 nvm_group: "{{ primary_user }}"
 nvm_install_path: "{{ nvm_home }}/.nvm"
-nvm_node_version: "v18.16.0"
+nvm_node_version: "--lts"
 nvm_node_dir: "{{ nvm_install_path }}/versions/node/{{ nvm_node_version }}"
 nvm_npm_path: "{{ nvm_node_dir }}/bin/npm"
 packages:
@@ -16,17 +16,17 @@ packages:
    - vim
    - traceroute
    - whois
-   - python3
-   - python3-pip
+   - python3.12
    - wget
    - git
    - nmap
-   - ansible
    - stow
    - glib2-devel
    - libsoup-devel
-   # - javascriptcoregtk4.0
-   # - javascriptcoregtk4.0-devel
-   # - rust-gdk0.15+v3_20-devel
-   # - webkit2gtk4.0
-   # - webkit2gtk4.0-devel
+   - webkit2gtk4.0-devel
+   - openssl-devel
+   - curl
+   - wget
+   - file
+   - libappindicator-gtk3-devel
+   - librsvg2-devel
