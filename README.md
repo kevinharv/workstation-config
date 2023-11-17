@@ -3,39 +3,24 @@ This project was inspired by Jeff Geerling (geerlingguy) and his Ansible configu
 
 ## Steps to Use
 1. Install OS
-2. Configure user, import dotfiles
-3. Ensure Python 3 and pip are installed
-4. ```pip3 install ansible```
-5. Restart shell (load ansible commands)
+2. Configure admin user as `kevin`
+3. Install Python 3.12
+4. Install Ansible: `python3.12 -m pip install ansible`
+5. Restart shell (load Ansible commands)
 6. Run playbook for relevant distro
 
 ## Platforms
-- Ubuntu (Debian)
-- RHEL (CentOS/Rocky)
+- WSL Ubuntu
+- Fedora
 
+## Manual Tweaks
+1. Enable Gnome Tweaks
+1. Enable Gnome User Shell
+1. (Optional) Enable Dash to Panel/Dock
+1. Download & Install Gnome Theme
+1. Download & Install Gnome Icons
+1. Download & Install Fonts
 
-## Actions
-1. Set hostname
-2. Install packages
-
-
-## Packages to Install
-- g++
-- gcc
-- openjdk-17-jre
-- make
-- nano
-- vim
-- traceroute
-- whois
-- python3
-- openssh-client
-- vagrant
-- wget
-- x11-apps
-- git
-- nmap
-- ssh-copy-id
-- ansible
-
-- node version manager - lts
+## To-Do
+- Add Google Chrome Installation
+- Verify no additional packages required for development
