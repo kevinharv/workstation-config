@@ -10,9 +10,31 @@
     name: '@C Development Tools and Libraries'
     state: present
 
-- name: Install Ansible
-  ansible.builtin.pip:
-    name: ansible
+- name: Install RPM Fusion
+  ansible.builtin.dnf:
+    name: "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_distribution_major_version }}.noarch.rpm"
+    state: present
+
+- name: Install VLC
+  ansible.builtin.package:
+    name: vlc
+    state: latest
+
+- block:
+  - name: Download Google Chrome RPM
+    ansible.builtin.get_url:
+      url: "https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm"
+      dest: "/tmp/google-chrome-stable.rpm"
+    
+  - name: Install Google Chrome
+    ansible.builtin.dnf:
+      name: "/tmp/google-chrome-stable.rpm"
+      state: present
+
+  - name: Remove Temporary RPM File
+    ansible.builtin.file:
+      path: "/tmp/google-chrome-stable.rpm"
+      state: absent
 
 # ----------------- Install NodeJS -----------------------
 

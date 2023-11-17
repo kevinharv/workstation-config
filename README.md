@@ -22,9 +22,5 @@ This project was inspired by Jeff Geerling (geerlingguy) and his Ansible configu
 1. Download & Install Fonts
 
 ## To-Do
-- Add Google Chrome Installation
 - Additional Packages
-    - htop (GUI only)
-    - vlc (video playback)
-    - EPEL on Fedora? Non-free Fedora repos?
     - Minikube?

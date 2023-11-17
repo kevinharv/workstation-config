@@ -16,7 +16,6 @@ packages:
    - vim
    - traceroute
    - whois
-   - python3.12
    - wget
    - git
    - nmap
@@ -30,3 +29,4 @@ packages:
    - file
    - libappindicator-gtk3-devel
    - librsvg2-devel
+   - htop
