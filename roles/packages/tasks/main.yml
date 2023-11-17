@@ -84,11 +84,15 @@
       dest: /tmp/sh.rustup.rs
       mode: '0755'
       force: 'yes'
+      owner: "{{ primary_user }}"
+      group: "{{ primary_user }}"
     tags:
       - rust
 
   - name: Install Rust/Cargo
-    ansible.builtin.shell: /tmp/sh.rustup.rs -y
+    ansible.builtin.command: /tmp/sh.rustup.rs -y
+    become: true
+    become_user: "{{ primary_user }}"
     tags:
       - rust
 

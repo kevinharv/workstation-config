@@ -23,4 +23,8 @@ This project was inspired by Jeff Geerling (geerlingguy) and his Ansible configu
 
 ## To-Do
 - Add Google Chrome Installation
-- Verify no additional packages required for development
+- Additional Packages
+    - htop (GUI only)
+    - vlc (video playback)
+    - EPEL on Fedora? Non-free Fedora repos?
+    - Minikube?
